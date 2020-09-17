@@ -1,0 +1,62 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MiREV.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DatabaseConnectionString" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Database.mdf;Integrated Security=True&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Database.mdf;Integrated Security=True</Value>
+    </Setting>
+    <Setting Name="MainLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">1280, 800</Value>
+    </Setting>
+    <Setting Name="ImgCentLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">1280, 1</Value>
+    </Setting>
+    <Setting Name="ImgCentSize" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">1302, 776</Value>
+    </Setting>
+    <Setting Name="ImgLeftLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">0, 1</Value>
+    </Setting>
+    <Setting Name="ImgLeftSize" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">1302, 776</Value>
+    </Setting>
+    <Setting Name="ImgRghtLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">2560, 1</Value>
+    </Setting>
+    <Setting Name="ImgRghtSize" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">1302, 776</Value>
+    </Setting>
+    <Setting Name="MapLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">0, 760</Value>
+    </Setting>
+    <Setting Name="MapSize" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">1280, 1280</Value>
+    </Setting>
+    <Setting Name="CodeLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">2840, 320</Value>
+    </Setting>
+    <Setting Name="CodeSize" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">596, 1560</Value>
+    </Setting>
+    <Setting Name="ScreenRatio" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="IncGaugSize" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">398, 918</Value>
+    </Setting>
+    <Setting Name="IncGaugLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">0, 0</Value>
+    </Setting>
+    <Setting Name="RadiusSize" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">2392, 21</Value>
+    </Setting>
+    <Setting Name="RadiusLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">0, 0</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
