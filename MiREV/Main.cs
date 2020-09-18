@@ -24,6 +24,7 @@ using System.Timers;
 using MiREV.Properties;
 using System.Net;
 using System.Net.Sockets;
+using Emgu.CV;
 
 namespace MiREV
 {
@@ -169,6 +170,16 @@ namespace MiREV
         ProjPanel projPanel;
         IncGauges incGauges;
         Radius radius;
+
+        public Matrix<double> cam_left_intr = new Matrix<double>(new double[3, 3] { { 624.58764006,0,707.4767552 }, { 0,619.76097575,430.72793602 }, { 0,0, 1,} });
+        public Matrix<double> cam_right_intr = new Matrix<double>(new double[3, 3] { { 627.50791955,0,670.36155163 }, { 0,628.15595222,410.00911493 }, { 0, 0,1,} });
+        public Matrix<double> cam_left_dist = new Matrix<double>(new double[] { -0.33529885,0.12410999,0,0,-0.02183655 });
+        public Matrix<double> cam_right_dist = new Matrix<double>(new double[] { -0.31407998,0.09706118,0, 0,-0.01319174 });
+        public Matrix<double> R = new Matrix<double>(new double[3, 3] { { 0.9992885,0.0376054,-0.00288683 }, { -0.03769141,0.99847203,-0.04040994 }, { 0.00136279,0.04049,0.99917901 } });
+        public Matrix<double> T = new Matrix<double>(new double[] { -0.31407998, 0.09706118, 0, 0, -0.01319174 });
+        public Matrix<double> P1 = new Matrix<double>(new double[3, 4] { { 623.95846399,0,747.533741,0}, { 0,623.95846399,417.59704208,0 }, { 0,0,1,0} });
+        public Matrix<double> P2 = new Matrix<double>(new double[3, 4] { { 623.95846399, 0,747.533741,- 14891.32038499 }, { 0,623.95846399,417.59704208, 0 }, { 0,0,1,0} });
+
         private Boolean isPanelShown = false;
 
         public int interval = 2;
@@ -232,6 +243,20 @@ namespace MiREV
 
         public Main()
         {
+            /*using (StreamReader r = new StreamReader("camParams.json"))
+            {
+                string json = r.ReadToEnd();
+                dynamic items=Newtonsoft.Json.Linq.JObject.Parse(json);
+                //cam_left_intr = items["CameraParameters1"]["IntrinsicMatrix"].to;
+                //cam_right_intr = items["CameraParameters2"]["IntrinsicMatrix"];
+                //cam_left_dist = items["CameraParameters1"]["RadialDistortion"];
+                //cam_right_dist = items["CameraParameters2"]["RadialDistortion"];
+                //R = items["RotationOfCamera2"];
+               // T = items["TranslationOfCamera2"];
+                //P1 = items["P1"];
+                //P2 = items["P2"].ToObject(typeof(Matrix<double>));
+            }*/
+
             if (Environment.OSVersion.Version.Major >= 6)                   // Ignore HDPI Windwos Scaling
                 SetProcessDPIAware();
 
@@ -604,8 +629,8 @@ namespace MiREV
         {
             if (b)
             {
-                process.Start();
-                process.WaitForInputIdle();
+                //process.Start();
+                //process.WaitForInputIdle();
 
                 imageLeft.Show();
                 //imageRght.Show();
@@ -620,7 +645,7 @@ namespace MiREV
             }
             else
             {
-                process.Kill();
+                //process.Kill();
 
                 imageLeft.Hide();
                 imageRght.Hide();
