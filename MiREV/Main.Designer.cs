@@ -64,7 +64,7 @@
             // 
             this.btnNext.Enabled = false;
             this.btnNext.Font = new System.Drawing.Font("Calibri", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNext.Location = new System.Drawing.Point(340, 113);
+            this.btnNext.Location = new System.Drawing.Point(338, 90);
             this.btnNext.Margin = new System.Windows.Forms.Padding(5);
             this.btnNext.Name = "btnNext";
             this.btnNext.Size = new System.Drawing.Size(56, 56);
@@ -76,11 +76,11 @@
             // txtTAG
             // 
             this.txtTAG.Enabled = false;
-            this.txtTAG.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtTAG.Location = new System.Drawing.Point(97, 113);
+            this.txtTAG.Font = new System.Drawing.Font("Calibri", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTAG.Location = new System.Drawing.Point(90, 92);
             this.txtTAG.Margin = new System.Windows.Forms.Padding(5);
             this.txtTAG.Name = "txtTAG";
-            this.txtTAG.Size = new System.Drawing.Size(238, 56);
+            this.txtTAG.Size = new System.Drawing.Size(238, 53);
             this.txtTAG.TabIndex = 3;
             this.txtTAG.Text = "0";
             this.txtTAG.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -91,7 +91,7 @@
             // 
             this.btnPrev.Enabled = false;
             this.btnPrev.Font = new System.Drawing.Font("Calibri", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPrev.Location = new System.Drawing.Point(36, 113);
+            this.btnPrev.Location = new System.Drawing.Point(24, 90);
             this.btnPrev.Margin = new System.Windows.Forms.Padding(5);
             this.btnPrev.Name = "btnPrev";
             this.btnPrev.Size = new System.Drawing.Size(56, 56);
@@ -181,7 +181,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(2120, 199);
+            this.ClientSize = new System.Drawing.Size(1924, 199);
             this.Controls.Add(this.btnExport);
             this.Controls.Add(this.btnNew);
             this.Controls.Add(this.btnOpen);

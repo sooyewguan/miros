@@ -25,6 +25,8 @@ using MiREV.Properties;
 using System.Net;
 using System.Net.Sockets;
 using Emgu.CV;
+using Emgu.CV.Util;
+using Newtonsoft.Json;
 
 namespace MiREV
 {
@@ -171,14 +173,14 @@ namespace MiREV
         IncGauges incGauges;
         Radius radius;
 
-        public Matrix<double> cam_left_intr = new Matrix<double>(new double[3, 3] { { 624.58764006,0,707.4767552 }, { 0,619.76097575,430.72793602 }, { 0,0, 1,} });
-        public Matrix<double> cam_right_intr = new Matrix<double>(new double[3, 3] { { 627.50791955,0,670.36155163 }, { 0,628.15595222,410.00911493 }, { 0, 0,1,} });
-        public Matrix<double> cam_left_dist = new Matrix<double>(new double[] { -0.33529885,0.12410999,0,0,-0.02183655 });
-        public Matrix<double> cam_right_dist = new Matrix<double>(new double[] { -0.31407998,0.09706118,0, 0,-0.01319174 });
-        public Matrix<double> R = new Matrix<double>(new double[3, 3] { { 0.9992885,0.0376054,-0.00288683 }, { -0.03769141,0.99847203,-0.04040994 }, { 0.00136279,0.04049,0.99917901 } });
+        public Matrix<double> cam_left_intr = new Matrix<double>(new double[3, 3] { { 624.58764006, 0, 707.4767552 }, { 0, 619.76097575, 430.72793602 }, { 0, 0, 1, } });
+        public Matrix<double> cam_right_intr = new Matrix<double>(new double[3, 3] { { 627.50791955, 0, 670.36155163 }, { 0, 628.15595222, 410.00911493 }, { 0, 0, 1, } });
+        public Matrix<double> cam_left_dist = new Matrix<double>(new double[] { -0.33529885, 0.12410999, 0, 0, -0.02183655 });
+        public Matrix<double> cam_right_dist = new Matrix<double>(new double[] { -0.31407998, 0.09706118, 0, 0, -0.01319174 });
+        public Matrix<double> R = new Matrix<double>(new double[3, 3] { { 0.9992885, 0.0376054, -0.00288683 }, { -0.03769141, 0.99847203, -0.04040994 }, { 0.00136279, 0.04049, 0.99917901 } });
         public Matrix<double> T = new Matrix<double>(new double[] { -0.31407998, 0.09706118, 0, 0, -0.01319174 });
-        public Matrix<double> P1 = new Matrix<double>(new double[3, 4] { { 623.95846399,0,747.533741,0}, { 0,623.95846399,417.59704208,0 }, { 0,0,1,0} });
-        public Matrix<double> P2 = new Matrix<double>(new double[3, 4] { { 623.95846399, 0,747.533741,- 14891.32038499 }, { 0,623.95846399,417.59704208, 0 }, { 0,0,1,0} });
+        public Matrix<double> P1 = new Matrix<double>(new double[3, 4] { { 623.95846399, 0, 747.533741, 0 }, { 0, 623.95846399, 417.59704208, 0 }, { 0, 0, 1, 0 } });
+        public Matrix<double> P2 = new Matrix<double>(new double[3, 4] { { 623.95846399, 0, 747.533741, -14891.32038499 }, { 0, 623.95846399, 417.59704208, 0 }, { 0, 0, 1, 0 } });
 
         private Boolean isPanelShown = false;
 
@@ -239,6 +241,9 @@ namespace MiREV
         private const int PORT = 4567;
         private byte[] buffer = new byte[BUFFER_SIZE];
 
+        List<VectorOfPointF> LeftPoints = new List<VectorOfPointF>(2) { };
+        List<VectorOfPointF> RightPoints = new List<VectorOfPointF>(2) { };
+
         private Process process;
 
         public Main()
@@ -256,6 +261,8 @@ namespace MiREV
                 //P1 = items["P1"];
                 //P2 = items["P2"].ToObject(typeof(Matrix<double>));
             }*/
+
+           
 
             if (Environment.OSVersion.Version.Major >= 6)                   // Ignore HDPI Windwos Scaling
                 SetProcessDPIAware();
@@ -413,7 +420,34 @@ namespace MiREV
                 //conStrng = "Data Source=(LocalDB)\\v11.0;AttachDbFilename=" + filename + ";Integrated Security=true";
                 conStrng = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + filename + ";Integrated Security=true";
                 loadProject();
+ 
 
+            }
+        }
+
+
+        public void loadJson()
+        {
+            using (StreamReader r = new StreamReader(filepath + "/calib.json"))
+            {
+                string json = r.ReadToEnd();
+                //List<Item> items = JsonConvert.DeserializeObject<List<Item>>(json);
+
+
+                /*dynamic JSON_content = JsonConvert.DeserializeObject(json);
+
+                Console.WriteLine(JSON_content);
+
+                cam_left_intr = new Matrix<double>(new double[3, 3], JSON_content.left_intrinsic_matrix);
+                //public Matrix<double> cam_left_intr = new Matrix<double>(new double[3, 3] { { JSON_content.left_intrinsic_matrix[0], 0, 707.4767552 }, { 0, 619.76097575, 430.72793602 }, { 0, 0, 1, } });
+
+                cam_right_intr = JSON_content["right_intrinsic_matrix"];
+                cam_left_dist = JSON_content["left_Distortion_matrix"];
+                cam_right_dist = JSON_content["right_Distortion_matrix"];
+                R = JSON_content["rotation_matrix"];
+                T = JSON_content["translation_matrix"];
+                P1 = JSON_content["left_projection_matrix"];
+                P2 = JSON_content["right_projection_matrix"];*/
             }
         }
 
@@ -520,12 +554,14 @@ namespace MiREV
             {
                 // [SOO 20200831] disable width measurement
                 // enableHomography = updateHomoValue() & updateHomoPlane() & updateHeightValue();
-                enableHomography = false;
+                // enableHomography = false;
 
-                if (enableHomography)
-                {
-                    imageCent.showHomography(true);
-                }
+                //if (enableHomography)
+                //{
+                //    imageCent.showHomography(true);
+                //}
+                loadJson();
+                enableHomography = true;
             }
         }
 
@@ -633,7 +669,7 @@ namespace MiREV
                 //process.WaitForInputIdle();
 
                 imageLeft.Show();
-                //imageRght.Show();
+                imageRght.Show();
                 //imageCent.Show();
                 mapViewer.Show();
                 codePanel.Show();
@@ -701,7 +737,9 @@ namespace MiREV
                                 locationManager location = new locationManager(double.Parse(reader["Latitude"].ToString()), double.Parse(reader["Longitude"].ToString()), double.Parse(reader["Longitude"].ToString()), double.Parse(reader["Longitude"].ToString()), double.Parse(reader["Longitude"].ToString()));
 
 
-                                imageInfo info = new imageInfo(int.Parse(reader["Id"].ToString()), location, reader["Image_left"].ToString(), reader["Image_cent"].ToString(), reader["Image_rght"].ToString(), Convert.ToBoolean(int.Parse(reader["Is100m"].ToString())), int.Parse(reader["Vida_Id"].ToString()));
+                                //imageInfo info = new imageInfo(int.Parse(reader["Id"].ToString()), location, reader["Image_left"].ToString(), reader["Image_cent"].ToString(), reader["Image_rght"].ToString(), Convert.ToBoolean(int.Parse(reader["Is100m"].ToString())), int.Parse(reader["Vida_Id"].ToString()));
+                                imageInfo info = new imageInfo(int.Parse(reader["Id"].ToString()), location, reader["Image_left"].ToString(), reader["Image_cent"].ToString(), reader["Image_rght"].ToString(), Convert.ToBoolean(reader["Is100m"].ToString()), int.Parse(reader["Vida_Id"].ToString()));
+
                                 imageList.Add(info);
 
                                 //Debug.WriteLine("Add: " + reader.GetInt32(0) + " " + reader.GetDouble(1) + " " + reader.GetDouble(2) + " " + reader.GetString(6) + " " + reader.GetString(7) + " " + reader.GetString(8) + " " + reader.GetBoolean(9) + " TAG:" + reader.GetInt32(10));
@@ -799,31 +837,83 @@ namespace MiREV
             return name;
         }
 
+        public List<int[]> getImageRect(string imageName)
+        {
+            string[] frameIds = imageName.Split('.');
+
+            // int[] numArray = new int[] { };
+            List<int[]> points = new List<int[]>();
+
+            using (SqlConnection con = new SqlConnection(conStrng))
+            {
+                using (SqlCommand com = con.CreateCommand())
+                {
+
+                    com.CommandText = "SELECT * FROM Speed WHERE CONVERT(VARCHAR, Frame_Id) = @id";
+                    com.Parameters.AddWithValue("@id", frameIds[0]);
+
+                    //SqlParameter param = new SqlParameter();
+                    //param.ParameterName = "@id";
+                    //.Value = "1090";
+                    //.Parameters.Add(param);
+                    con.Open();
+
+                    using (SqlDataReader reader = com.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            //Debug.WriteLine(reader["Xmin"].ToString());
+
+                            int[] point = { int.Parse(reader["Xmin"].ToString()), int.Parse(reader["Ymin"].ToString()), int.Parse(reader["Xmax"].ToString()), int.Parse(reader["Ymax"].ToString()), Convert.ToInt32(double.Parse(reader["Speed"].ToString())) };
+
+                            points.Add(point);
+                        }
+                    }
+
+
+                }
+            }
+            return points;
+        }
+
         public Boolean changeImag(int index)
         {
             imageCent.showMeasurement(false);
             imageCent.startPoint = new Point();
             imageCent.endedPoint = new Point();
 
+            imageLeft.ClearRect();
+
             Boolean validImage = true;
 
             String[] image_name = getImageName(index);
+            String[] image_path = { "", "", "" };
 
-            image_name[0] = filepath + "\\" + image_foldername[0] + "\\" + image_name[0];
-            image_name[1] = filepath + "\\" + image_foldername[1] + "\\" + image_name[1];
-            image_name[2] = filepath + "\\" + image_foldername[2] + "\\" + image_name[2];
+            image_path[0] = filepath + "\\" + image_foldername[0] + "\\" + image_name[0];
+            image_path[1] = filepath + "\\" + image_foldername[1] + "\\" + image_name[1];
+            image_path[2] = filepath + "\\" + image_foldername[2] + "\\" + image_name[2];
 
-            if (File.Exists(image_name[0]))
-                imageLeft.LoadImage(image_name[0]);
+            if (File.Exists(image_path[0]))
+            {
+                imageLeft.LoadImage(image_path[0]);
+
+                List<int[]> points = getImageRect(image_name[0]);
+
+                if (points.Count > 0)
+                {
+                    for (int i = 0; i < points.Count; i++)
+                        imageLeft.DrawRect(points[i]);
+                }
+            }
             else
                 validImage = false;
 
-            if (File.Exists(image_name[1]))
+            if (File.Exists(image_path[1]))
             {
                 try
                 {
-                    if(clientSocket != null && clientSocket.Connected)
-                        clientSocket.Send(Encoding.ASCII.GetBytes(image_name[1]));
+                    if (clientSocket != null && clientSocket.Connected)
+                        clientSocket.Send(Encoding.ASCII.GetBytes(image_path[1]));
                 }
                 catch (SocketException)
                 {
@@ -839,10 +929,10 @@ namespace MiREV
             //else
             //    validImage = false;
 
-            //if (File.Exists(image_name[2]))
-            //    imageRght.LoadImage(image_name[2]);
-            //else
-            //    validImage = false;
+            if (File.Exists(image_path[2]))
+                imageRght.LoadImage(image_path[2]);
+            else
+                validImage = false;
 
             //incGauges.animation(locationManager);
 
@@ -1134,6 +1224,7 @@ namespace MiREV
             Debug.WriteLine(s);
             return s;
         }*/
+
 
         public async void updateRoadName(double lat, double lng)
         {
@@ -1457,7 +1548,7 @@ namespace MiREV
                         left_id.Add(Int32.Parse(Regex.Match(image_name[0], @"\d+").Value));
 
                         // [SOO 202200831] file name too long
-                        cent_id.Add(Int32.Parse(Regex.Match(image_name[1].Substring(0,10), @"\d+").Value));
+                        cent_id.Add(Int32.Parse(Regex.Match(image_name[1].Substring(0, 10), @"\d+").Value));
                         rght_id.Add(Int32.Parse(Regex.Match(image_name[2], @"\d+").Value));
 
                         Console.WriteLine("Id:" + left_id[i] + " " + cent_id[i] + " " + rght_id[i]);
@@ -1710,6 +1801,7 @@ namespace MiREV
             shouldUpdateTrackbar = false;
         }
 
+
         // [SOO 20200831] Socket Server for 360
         private void SetupServer()
         {
@@ -1764,5 +1856,67 @@ namespace MiREV
                 return;
             }
         }
+
+        public double AddLeftPoints(Point startPoint, Point endPoint)
+        {
+            LeftPoints.Clear();
+
+            var distorted_point = new VectorOfPointF(new[] { new PointF(startPoint.X, startPoint.Y) });
+            var undistorted_point = new VectorOfPointF(new[] { new PointF(-1, -1) });
+            //undistor the pionts
+            CvInvoke.UndistortPoints(distorted_point, undistorted_point, cam_left_intr, cam_left_dist, null, P1);
+
+            LeftPoints.Add(undistorted_point);
+
+            distorted_point = new VectorOfPointF(new[] { new PointF(endPoint.X, endPoint.Y) });
+            undistorted_point = new VectorOfPointF(new[] { new PointF(-1, -1) });
+            //undistor the pionts
+            CvInvoke.UndistortPoints(distorted_point, undistorted_point, cam_left_intr, cam_left_dist, null, P1);
+
+            LeftPoints.Add(undistorted_point);
+
+            //if (RightPoints.Count() == 2)
+            //    return ComputeDistance();
+            //else
+                return 0;
+        }
+
+        public double AddRightPoints(Point startPoint, Point endPoint)
+        {
+            RightPoints.Clear();
+
+            var distorted_point = new VectorOfPointF(new[] { new PointF(startPoint.X, startPoint.Y) });
+            var undistorted_point = new VectorOfPointF(new[] { new PointF(-1, -1) });
+            //undistor the pionts
+            CvInvoke.UndistortPoints(distorted_point, undistorted_point, cam_left_intr, cam_left_dist, null, P1);
+
+            RightPoints.Add(undistorted_point);
+
+            distorted_point = new VectorOfPointF(new[] { new PointF(endPoint.X, endPoint.Y) });
+            undistorted_point = new VectorOfPointF(new[] { new PointF(-1, -1) });
+            //undistor the pionts
+            CvInvoke.UndistortPoints(distorted_point, undistorted_point, cam_left_intr, cam_left_dist, null, P1);
+
+            RightPoints.Add(undistorted_point);
+
+            if (LeftPoints.Count() == 2)
+                return ComputeDistance();
+            else
+                return 0;
+        }
+
+        public double ComputeDistance() {
+            Matrix<float> Tt1 = new Matrix<float>(4, 1);
+             Matrix<float> Tt2 = new Matrix<float>(4, 1);
+            CvInvoke.TriangulatePoints(P1, P2, LeftPoints[0], RightPoints[0], Tt1);
+                    CvInvoke.TriangulatePoints(P1, P2, LeftPoints[1], RightPoints[1], Tt2);
+                    var Tt13D = Tt1.Mul(1 / Tt1[3, 0]); // Convert from homogeneous coordinates [X Y Z W] to Euclidean space [X Y Z 1]
+            var Tt23D = Tt2.Mul(1 / Tt2[3, 0]); // Convert from homogeneous coordinates [X Y Z W] to Euclidean space [X Y Z 1]
+            Console.WriteLine(Distance(Tt13D, Tt23D)/100); // Euclidean distance
+
+            return Distance(Tt13D, Tt23D) / 100;
+        }
+
+        public static double Distance(Matrix<float> T1, Matrix<float> T2) => Math.Sqrt(Math.Pow(T1[0, 0] - T2[0, 0], 2) + Math.Pow(T1[1, 0] - T2[1, 0], 2) + Math.Pow(T1[2, 0] - T2[2, 0], 2) + Math.Pow(T1[3, 0] - T2[3, 0], 2));
     }
 }
