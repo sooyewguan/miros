@@ -173,14 +173,15 @@ namespace MiREV
         IncGauges incGauges;
         Radius radius;
 
-        public Matrix<double> cam_left_intr = new Matrix<double>(new double[3, 3] { { 624.58764006, 0, 707.4767552 }, { 0, 619.76097575, 430.72793602 }, { 0, 0, 1, } });
-        public Matrix<double> cam_right_intr = new Matrix<double>(new double[3, 3] { { 627.50791955, 0, 670.36155163 }, { 0, 628.15595222, 410.00911493 }, { 0, 0, 1, } });
-        public Matrix<double> cam_left_dist = new Matrix<double>(new double[] { -0.33529885, 0.12410999, 0, 0, -0.02183655 });
-        public Matrix<double> cam_right_dist = new Matrix<double>(new double[] { -0.31407998, 0.09706118, 0, 0, -0.01319174 });
-        public Matrix<double> R = new Matrix<double>(new double[3, 3] { { 0.9992885, 0.0376054, -0.00288683 }, { -0.03769141, 0.99847203, -0.04040994 }, { 0.00136279, 0.04049, 0.99917901 } });
-        public Matrix<double> T = new Matrix<double>(new double[] { -0.31407998, 0.09706118, 0, 0, -0.01319174 });
-        public Matrix<double> P1 = new Matrix<double>(new double[3, 4] { { 623.95846399, 0, 747.533741, 0 }, { 0, 623.95846399, 417.59704208, 0 }, { 0, 0, 1, 0 } });
-        public Matrix<double> P2 = new Matrix<double>(new double[3, 4] { { 623.95846399, 0, 747.533741, -14891.32038499 }, { 0, 623.95846399, 417.59704208, 0 }, { 0, 0, 1, 0 } });
+        public Matrix<double> cam_left_intr = new Matrix<double>(new double[3, 3] );
+        public Matrix<double> cam_right_intr = new Matrix<double>(new double[3, 3] );
+        public Matrix<double> cam_left_dist = new Matrix<double>(new double[5] );
+        public Matrix<double> cam_right_dist = new Matrix<double>(new double[5] );
+        public Matrix<double> R = new Matrix<double>(new double[3, 3]);
+        //public Matrix<double> T = new Matrix<double>(new double[] { -0.31407998, 0.09706118, 0, 0, -0.01319174 });
+        public Matrix<double> T = new Matrix<double>(new double[3] );
+        public Matrix<double> P1 = new Matrix<double>(new double[3, 4]);
+        public Matrix<double> P2 = new Matrix<double>(new double[3, 4]);
 
         private Boolean isPanelShown = false;
 
@@ -428,27 +429,57 @@ namespace MiREV
 
         public void loadJson()
         {
-            using (StreamReader r = new StreamReader(filepath + "/calib.json"))
+            using (FileStorage fs = new FileStorage(filepath + "/calib.yaml", FileStorage.Mode.Read ))
+            {
+                Mat mat_left_intr = new Mat();
+                Mat mat_right_intr = new Mat();
+                Mat mat_left_dist = new Mat();
+                Mat mat_right_dist = new Mat();
+                Mat mat_R = new Mat();
+                Mat mat_T = new Mat();
+                Mat mat_P1 = new Mat();
+                Mat mat_P2 = new Mat();
+                Console.WriteLine("testing");
+                Console.WriteLine(cam_left_intr[0,0]);
+                fs.GetNode("left_intrinsic_matrix").ReadMat(mat_left_intr);
+                fs.GetNode("left_Distortion_matrix").ReadMat(mat_left_dist);
+                fs.GetNode("left_projection_matrix").ReadMat(mat_P1);
+                fs.GetNode("right_intrinsic_matrix").ReadMat(mat_right_intr);
+                fs.GetNode("right_Distortion_matrix").ReadMat(mat_right_dist);
+                fs.GetNode("right_projection_matrix").ReadMat(mat_P2);
+                fs.GetNode("rotation_matrix").ReadMat(mat_R);
+                fs.GetNode("translation_matrix").ReadMat(mat_T);
+                mat_left_intr.CopyTo(cam_left_intr);
+                mat_right_intr.CopyTo(cam_right_intr);
+                mat_left_dist.CopyTo(cam_left_dist);
+                mat_right_dist.CopyTo(cam_right_dist);
+                mat_R.CopyTo(R);
+                mat_T.CopyTo(T);
+                mat_P1.CopyTo(P1);
+                mat_P2.CopyTo(P2);
+                Console.WriteLine(cam_left_intr[0, 0]);
+            }
+            /*using (StreamReader r = new StreamReader(filepath + "/calib.json"))
             {
                 string json = r.ReadToEnd();
                 //List<Item> items = JsonConvert.DeserializeObject<List<Item>>(json);
 
 
-                /*dynamic JSON_content = JsonConvert.DeserializeObject(json);
+                dynamic JSON_content = JsonConvert.DeserializeObject(json);
 
-                Console.WriteLine(JSON_content);
+                Console.WriteLine(JSON_content["left_intrinsic_matrix"].GetType());
 
-                cam_left_intr = new Matrix<double>(new double[3, 3], JSON_content.left_intrinsic_matrix);
+                //cam_left_intr = new Matrix<double>(new double[3, 3], JSON_content.left_intrinsic_matrix);
                 //public Matrix<double> cam_left_intr = new Matrix<double>(new double[3, 3] { { JSON_content.left_intrinsic_matrix[0], 0, 707.4767552 }, { 0, 619.76097575, 430.72793602 }, { 0, 0, 1, } });
-
+                cam_left_intr = new Matrix<double>(JSON_content["left_intrinsic_matrix"].ToObject<double[][]>());
                 cam_right_intr = JSON_content["right_intrinsic_matrix"];
                 cam_left_dist = JSON_content["left_Distortion_matrix"];
                 cam_right_dist = JSON_content["right_Distortion_matrix"];
                 R = JSON_content["rotation_matrix"];
                 T = JSON_content["translation_matrix"];
                 P1 = JSON_content["left_projection_matrix"];
-                P2 = JSON_content["right_projection_matrix"];*/
-            }
+                P2 = JSON_content["right_projection_matrix"];
+            }*/
         }
 
         private void trackBar_ValueChanged(object sender, System.EventArgs e)
@@ -1860,13 +1891,17 @@ namespace MiREV
         public double AddLeftPoints(Point startPoint, Point endPoint)
         {
             LeftPoints.Clear();
-
+            Console.WriteLine(cam_left_intr[0,0]);
+            Debug.WriteLine(startPoint.X);
+            Debug.WriteLine(startPoint.Y);
             var distorted_point = new VectorOfPointF(new[] { new PointF(startPoint.X, startPoint.Y) });
             var undistorted_point = new VectorOfPointF(new[] { new PointF(-1, -1) });
             //undistor the pionts
             CvInvoke.UndistortPoints(distorted_point, undistorted_point, cam_left_intr, cam_left_dist, null, P1);
 
             LeftPoints.Add(undistorted_point);
+            Debug.WriteLine(endPoint.X);
+            Debug.WriteLine(endPoint.Y);
 
             distorted_point = new VectorOfPointF(new[] { new PointF(endPoint.X, endPoint.Y) });
             undistorted_point = new VectorOfPointF(new[] { new PointF(-1, -1) });
@@ -1888,14 +1923,14 @@ namespace MiREV
             var distorted_point = new VectorOfPointF(new[] { new PointF(startPoint.X, startPoint.Y) });
             var undistorted_point = new VectorOfPointF(new[] { new PointF(-1, -1) });
             //undistor the pionts
-            CvInvoke.UndistortPoints(distorted_point, undistorted_point, cam_left_intr, cam_left_dist, null, P1);
+            CvInvoke.UndistortPoints(distorted_point, undistorted_point, cam_right_intr, cam_right_dist, null, P2);
 
             RightPoints.Add(undistorted_point);
 
             distorted_point = new VectorOfPointF(new[] { new PointF(endPoint.X, endPoint.Y) });
             undistorted_point = new VectorOfPointF(new[] { new PointF(-1, -1) });
             //undistor the pionts
-            CvInvoke.UndistortPoints(distorted_point, undistorted_point, cam_left_intr, cam_left_dist, null, P1);
+            CvInvoke.UndistortPoints(distorted_point, undistorted_point, cam_right_intr, cam_right_dist, null, P2);
 
             RightPoints.Add(undistorted_point);
 
@@ -1912,9 +1947,9 @@ namespace MiREV
                     CvInvoke.TriangulatePoints(P1, P2, LeftPoints[1], RightPoints[1], Tt2);
                     var Tt13D = Tt1.Mul(1 / Tt1[3, 0]); // Convert from homogeneous coordinates [X Y Z W] to Euclidean space [X Y Z 1]
             var Tt23D = Tt2.Mul(1 / Tt2[3, 0]); // Convert from homogeneous coordinates [X Y Z W] to Euclidean space [X Y Z 1]
-            Console.WriteLine(Distance(Tt13D, Tt23D)/100); // Euclidean distance
+            Console.WriteLine(Distance(Tt13D, Tt23D)); // Euclidean distance
 
-            return Distance(Tt13D, Tt23D) / 100;
+            return Distance(Tt13D, Tt23D) ;
         }
 
         public static double Distance(Matrix<float> T1, Matrix<float> T2) => Math.Sqrt(Math.Pow(T1[0, 0] - T2[0, 0], 2) + Math.Pow(T1[1, 0] - T2[1, 0], 2) + Math.Pow(T1[2, 0] - T2[2, 0], 2) + Math.Pow(T1[3, 0] - T2[3, 0], 2));
