@@ -38,6 +38,8 @@ namespace MiREV
         public Point endedPoint = new Point();
 
         private Boolean startDrawing = false;
+        private Boolean enableDrawing = false;
+
         private Boolean enableHomography = true;
 
         //Font font = new Font()
@@ -127,7 +129,7 @@ namespace MiREV
             this.Opacity = 1.0;
             isMoving = false;
 
-
+            //pictureBox.Width;
         }
 
         private void ImageLeft_ResizeBegin(object sender, EventArgs e)
@@ -152,10 +154,11 @@ namespace MiREV
                 //    showHomography(enableHomography);
                 //}
 
-                if (e.Button == MouseButtons.Left)
+                if (e.Button == MouseButtons.Left && enableDrawing)
                 {
                     if (startDrawing)
                     {
+                        enableDrawing = false;
                         startDrawing = false;
                         pictureBox.Cursor = Cursors.Default;
 
@@ -316,11 +319,11 @@ namespace MiREV
         {
             if (startDrawing)
             {
-                mousePath.Reset();
-                mousePath.AddLine(startPoint.X, startPoint.Y, e.X, e.Y);
-                pictureBox.Invalidate();
+                //mousePath.Reset();
+                //mousePath.AddLine(startPoint.X, startPoint.Y, e.X, e.Y);
+                //pictureBox.Invalidate();
 
-                /*if (Control.ModifierKeys == Keys.Control)
+                if (Control.ModifierKeys == Keys.Control)
                 {
                     mousePath.Reset();
                     mousePath.AddLine(startPoint.X, startPoint.Y, startPoint.X, e.Y);
@@ -340,7 +343,7 @@ namespace MiREV
                     //lblDistance.Location = new Point(e.X + 5, startPoint.Y - 14);
 
                     pictureBox.Invalidate();
-                }*/
+                }
 
             }
 
@@ -480,6 +483,20 @@ namespace MiREV
             }
 
             return unscaled_p;
+        }
+
+        private void btnMeasure_Click(object sender, EventArgs e)
+        {
+            if(enableDrawing)
+            {
+                enableDrawing = false;
+                pictureBox.Cursor = Cursors.Default;
+            } else
+            {
+                enableDrawing = true;
+                pictureBox.Cursor = Cursors.Cross;
+            }
+            
         }
     }
 }

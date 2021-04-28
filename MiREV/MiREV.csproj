@@ -162,6 +162,7 @@
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="TableDumper.cs" />
+    <None Include="Resources\ruler.png" />
     <EmbeddedResource Include="CodePanel.resx">
       <DependentUpon>CodePanel.cs</DependentUpon>
     </EmbeddedResource>

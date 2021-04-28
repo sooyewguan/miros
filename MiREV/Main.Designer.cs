@@ -39,6 +39,7 @@
             this.btnExport = new System.Windows.Forms.Button();
             this.btnNew = new System.Windows.Forms.Button();
             this.btnOpen = new System.Windows.Forms.Button();
+            this.btn360 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
             this.SuspendLayout();
             // 
@@ -176,12 +177,26 @@
             this.btnOpen.UseVisualStyleBackColor = true;
             this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
             // 
+            // btn360
+            // 
+            this.btn360.Enabled = false;
+            this.btn360.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn360.Location = new System.Drawing.Point(864, 109);
+            this.btn360.Name = "btn360";
+            this.btn360.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.btn360.Size = new System.Drawing.Size(80, 80);
+            this.btn360.TabIndex = 10;
+            this.btn360.Text = "360";
+            this.btn360.UseVisualStyleBackColor = true;
+            this.btn360.Click += new System.EventHandler(this.btn360_Click);
+            // 
             // Main
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(1924, 199);
+            this.Controls.Add(this.btn360);
             this.Controls.Add(this.btnExport);
             this.Controls.Add(this.btnNew);
             this.Controls.Add(this.btnOpen);
@@ -225,6 +240,7 @@
         private System.Windows.Forms.Button btnPlay;
         private System.Windows.Forms.Button btnLock;
         private System.Windows.Forms.Button btnProjector;
+        private System.Windows.Forms.Button btn360;
     }
 }
 

@@ -115,7 +115,7 @@ namespace MiREV
             try
             {
                 doneRotate2 = false;
-                int a = 250;
+                /*int a = 250;
                 Bitmap bmp = new Bitmap(a, a);
                 Graphics gfx = Graphics.FromImage(bmp);
                 gfx.TranslateTransform((float)a / 2, (float)a / 2);
@@ -124,7 +124,7 @@ namespace MiREV
                 gfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
                 gfx.DrawImage(roll, new System.Drawing.Point(0, 0));
                 gfx.Dispose();
-                pbRoll.Image = bmp;
+                pbRoll.Image = bmp;*/
                 txtRoll.Text = Math.Round(rotationAngle, 3).ToString();
                 doneRotate2 = true;
             }
@@ -137,7 +137,7 @@ namespace MiREV
             try
             {
                 doneRotate = false;
-                int a = 500;
+                /*int a = 500;
                 Bitmap bmp = new Bitmap(a, a);
                 Graphics gfx = Graphics.FromImage(bmp);
                 gfx.TranslateTransform((float)a / 2, (float)a / 2);
@@ -146,7 +146,7 @@ namespace MiREV
                 gfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
                 gfx.DrawImage(pitch, new System.Drawing.Point(0, 0));
                 gfx.Dispose();
-                pbPitch.Image = bmp;
+                pbPitch.Image = bmp;*/
                 txtPitch.Text = Math.Round(rotationAngle, 3).ToString();
                 doneRotate = true;
             }

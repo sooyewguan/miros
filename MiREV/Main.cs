@@ -246,6 +246,7 @@ namespace MiREV
         List<VectorOfPointF> RightPoints = new List<VectorOfPointF>(2) { };
 
         private Process process;
+        private Boolean processStarted = false;
 
         public Main()
         {
@@ -306,6 +307,10 @@ namespace MiREV
             btnLock.Size = new Size((int)(btnLock.Width * screenRatio), (int)(btnLock.Height * screenRatio));
             btnLock.Location = new Point((int)(btnLock.Location.X * screenRatio), (int)(btnLock.Location.Y * screenRatio));
             btnLock.Image = new Bitmap(Resources.unlocked, new Size((int)(48.0 * screenRatio), (int)(48.0 * screenRatio)));
+
+            btn360.Size = new Size((int)(btn360.Width * screenRatio), (int)(btn360.Height * screenRatio));
+            btn360.Location = new Point((int)(btn360.Location.X * screenRatio), (int)(btn360.Location.Y * screenRatio));
+            btn360.Font = new Font("Microsoft Sans Serif", (float)(8 + 4 * screenRatio));
 
             trackBar.Size = new Size((int)(trackBar.Width * screenRatio), (int)(trackBar.Height * screenRatio));
             trackBar.Location = new Point((int)(trackBar.Location.X * screenRatio), (int)(trackBar.Location.Y * screenRatio));
@@ -499,8 +504,8 @@ namespace MiREV
                     {
                         updateInfo(trackBar.Value);
                         // [SOO 20200831] Disable Inclinometer
-                        // updateInMeter(trackBar.Value);
-                        // updateRadius(trackBar.Value);
+                        updateInMeter(trackBar.Value);
+                        updateRadius(trackBar.Value);
                         mapViewer.MarkerImageSwitch(trackBar.Value);
                         txtTAG.Text = (trackBar.Value).ToString();
                     }
@@ -680,6 +685,7 @@ namespace MiREV
             btnPlay.Enabled = b;
             btnProjector.Enabled = b;
             btnLock.Enabled = b;
+            btn360.Enabled = b;
 
             txtTAG.Enabled = b;
 
@@ -712,7 +718,11 @@ namespace MiREV
             }
             else
             {
-                //process.Kill();
+                if(processStarted)
+                {
+                    processStarted = false;
+                    process.Kill();
+                }
 
                 imageLeft.Hide();
                 imageRght.Hide();
@@ -870,7 +880,7 @@ namespace MiREV
 
         public List<int[]> getImageRect(string imageName)
         {
-            string[] frameIds = imageName.Split('.');
+            //string[] frameIds = imageName.Split('.');
 
             // int[] numArray = new int[] { };
             List<int[]> points = new List<int[]>();
@@ -881,7 +891,7 @@ namespace MiREV
                 {
 
                     com.CommandText = "SELECT * FROM Speed WHERE CONVERT(VARCHAR, Frame_Id) = @id";
-                    com.Parameters.AddWithValue("@id", frameIds[0]);
+                    com.Parameters.AddWithValue("@id", imageName);
 
                     //SqlParameter param = new SqlParameter();
                     //param.ParameterName = "@id";
@@ -895,7 +905,7 @@ namespace MiREV
                         {
                             //Debug.WriteLine(reader["Xmin"].ToString());
 
-                            int[] point = { int.Parse(reader["Xmin"].ToString()), int.Parse(reader["Ymin"].ToString()), int.Parse(reader["Xmax"].ToString()), int.Parse(reader["Ymax"].ToString()), Convert.ToInt32(double.Parse(reader["Speed"].ToString())) };
+                            int[] point = { int.Parse(reader["Xmin"].ToString()), int.Parse(reader["Ymin"].ToString()), int.Parse(reader["Xmax"].ToString()), int.Parse(reader["Ymax"].ToString()), Convert.ToInt32(double.Parse(reader["Target_Speed"].ToString())) };
 
                             points.Add(point);
                         }
@@ -1867,6 +1877,11 @@ namespace MiREV
                 socket2.Send(data);
             }*/
             serverSocket.BeginAccept(AcceptCallback, null);
+
+            if (trackBar.InvokeRequired)
+            {
+                trackBar.Invoke(new MethodInvoker(delegate { changeImag(trackBar.Value); }));
+            }
         }
 
         private void ReceiveCallback(IAsyncResult AR)
@@ -1885,6 +1900,28 @@ namespace MiREV
                 current.Close();
                 clientSocket = null;
                 return;
+            }
+        }
+
+        private void btn360_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (processStarted)
+                {
+                    processStarted = false;
+                    process.Kill();
+                }
+                else
+                {
+                    processStarted = true;
+                    process.Start();
+                    process.WaitForInputIdle();
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("process exception");
             }
         }
 

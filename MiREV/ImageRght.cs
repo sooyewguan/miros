@@ -208,9 +208,31 @@ namespace MiREV
         {
             if (startDrawing)
             {
-                mousePath.Reset();
-                mousePath.AddLine(startPoint.X, startPoint.Y, e.X, e.Y);
-                pictureBox.Invalidate();
+                //mousePath.Reset();
+                //mousePath.AddLine(startPoint.X, startPoint.Y, e.X, e.Y);
+                //pictureBox.Invalidate();
+
+                if (Control.ModifierKeys == Keys.Control)
+                {
+                    mousePath.Reset();
+                    mousePath.AddLine(startPoint.X, startPoint.Y, startPoint.X, e.Y);
+                    //measureWidth = false;
+                    //lblDistance.Text = roadWidth(rescalePoint(startPoint), rescalePoint(new Point(e.X, e.Y))).ToString("#0.00") + "m";
+                    //lblDistance.Location = new Point(e.X + 5, e.Y - 14);
+
+                    pictureBox.Invalidate();
+
+                }
+                else
+                {
+                    mousePath.Reset();
+                    mousePath.AddLine(startPoint.X, startPoint.Y, e.X, startPoint.Y);
+                    //measureWidth = true;
+                    //lblDistance.Text = roadWidth(rescalePoint(startPoint), rescalePoint(new Point(e.X, startPoint.Y))).ToString("#0.00") + "m";
+                    //lblDistance.Location = new Point(e.X + 5, startPoint.Y - 14);
+
+                    pictureBox.Invalidate();
+                }
 
             }
 
