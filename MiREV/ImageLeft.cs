@@ -42,12 +42,17 @@ namespace MiREV
 
         private Boolean enableHomography = true;
 
+        private float pref = 0;
+        private float rref = 0;
+
         //Font font = new Font()
 
         public ImageLeft(Main main)
         {
             InitializeComponent();
             _main = main;
+
+            SetStyle(ControlStyles.SupportsTransparentBackColor, true);
 
             speedPath = new System.Drawing.Drawing2D.GraphicsPath();
             distancePath = new System.Drawing.Drawing2D.GraphicsPath();
@@ -498,5 +503,36 @@ namespace MiREV
             }
             
         }
+
+        public void animation(double acx1, double acx2, double acx3, double acy1, double acy2, double acy3)
+        {
+            rref = (float)(acx1 + acx2 + acx3) / 3;
+            pref = (float)(acy1 + acy2 + acy3) / 3;
+
+            if (pref >= 10.0)
+            {
+                _main.updateGrade("5 - >= 10%");
+            }
+            else
+            {
+                if (pref >= 7.5)
+                {
+                    _main.updateGrade("4 - >= 7.5% to <10%");
+                }
+                else
+                {
+                    _main.updateGrade("1 - >= 0% to <7.5%");
+                }
+            }
+
+            //if (doneRotate)
+            //    Invoke(new Action<float>(RotateImage), rref * (-1));
+            //if (doneRotate2)
+            //    Invoke(new Action<float>(RotateImage2), pref);
+
+            txtRoll.Text = Math.Round(rref * (-1), 3).ToString();
+            txtPitch.Text = Math.Round(pref, 3).ToString();
+        }
+
     }
 }

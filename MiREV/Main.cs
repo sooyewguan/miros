@@ -367,7 +367,7 @@ namespace MiREV
                 imageRght.BringToFront();
                 imageCent.BringToFront();
                 codePanel.BringToFront();
-                incGauges.BringToFront();
+                //incGauges.BringToFront();
                 radius.BringToFront();
                 this.Focus();
             }
@@ -710,7 +710,7 @@ namespace MiREV
                 //imageCent.Show();
                 mapViewer.Show();
                 codePanel.Show();
-                incGauges.Show();
+                //incGauges.Show();
                 radius.Show();
                 isPanelShown = true;
 
@@ -729,7 +729,7 @@ namespace MiREV
                 imageCent.Hide();
                 mapViewer.Hide();
                 codePanel.Hide();
-                incGauges.Hide();
+                //incGauges.Hide();
                 radius.Hide();
 
             }
@@ -984,7 +984,7 @@ namespace MiREV
         {
             try
             {
-                incGauges.animation(imageList[index].location.acx, imageList[index + 1].location.acx, imageList[index + 2].location.acx, imageList[index].location.acy, imageList[index + 1].location.acy, imageList[index + 2].location.acy);
+                imageLeft.animation(imageList[index].location.acx, imageList[index + 1].location.acx, imageList[index + 2].location.acx, imageList[index].location.acy, imageList[index + 1].location.acy, imageList[index + 2].location.acy);
             }
             catch (ArgumentOutOfRangeException ex)
             {

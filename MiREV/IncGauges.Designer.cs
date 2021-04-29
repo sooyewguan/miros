@@ -47,10 +47,11 @@
             this.txtRoll.Enabled = false;
             this.txtRoll.Font = new System.Drawing.Font("Segoe UI Symbol", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtRoll.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.txtRoll.Location = new System.Drawing.Point(103, 27);
+            this.txtRoll.Location = new System.Drawing.Point(41, 11);
+            this.txtRoll.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.txtRoll.Name = "txtRoll";
             this.txtRoll.ReadOnly = true;
-            this.txtRoll.Size = new System.Drawing.Size(157, 51);
+            this.txtRoll.Size = new System.Drawing.Size(65, 25);
             this.txtRoll.TabIndex = 52;
             this.txtRoll.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -60,10 +61,11 @@
             this.txtPitch.Enabled = false;
             this.txtPitch.Font = new System.Drawing.Font("Segoe UI Symbol", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtPitch.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.txtPitch.Location = new System.Drawing.Point(106, 433);
+            this.txtPitch.Location = new System.Drawing.Point(42, 173);
+            this.txtPitch.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.txtPitch.Name = "txtPitch";
             this.txtPitch.ReadOnly = true;
-            this.txtPitch.Size = new System.Drawing.Size(157, 51);
+            this.txtPitch.Size = new System.Drawing.Size(65, 25);
             this.txtPitch.TabIndex = 51;
             this.txtPitch.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -71,9 +73,10 @@
             // 
             this.pbRoll.BackColor = System.Drawing.Color.Transparent;
             this.pbRoll.Image = ((System.Drawing.Image)(resources.GetObject("pbRoll.Image")));
-            this.pbRoll.Location = new System.Drawing.Point(57, 531);
+            this.pbRoll.Location = new System.Drawing.Point(23, 212);
+            this.pbRoll.Margin = new System.Windows.Forms.Padding(1);
             this.pbRoll.Name = "pbRoll";
-            this.pbRoll.Size = new System.Drawing.Size(250, 250);
+            this.pbRoll.Size = new System.Drawing.Size(100, 100);
             this.pbRoll.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbRoll.TabIndex = 50;
             this.pbRoll.TabStop = false;
@@ -82,9 +85,10 @@
             // 
             this.pbPitch.BackColor = System.Drawing.Color.Transparent;
             this.pbPitch.Image = ((System.Drawing.Image)(resources.GetObject("pbPitch.Image")));
-            this.pbPitch.Location = new System.Drawing.Point(58, 125);
+            this.pbPitch.Location = new System.Drawing.Point(23, 50);
+            this.pbPitch.Margin = new System.Windows.Forms.Padding(1);
             this.pbPitch.Name = "pbPitch";
-            this.pbPitch.Size = new System.Drawing.Size(250, 250);
+            this.pbPitch.Size = new System.Drawing.Size(100, 100);
             this.pbPitch.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbPitch.TabIndex = 49;
             this.pbPitch.TabStop = false;
@@ -93,9 +97,10 @@
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(24, 90);
+            this.pictureBox1.Location = new System.Drawing.Point(10, 36);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(1);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(320, 320);
+            this.pictureBox1.Size = new System.Drawing.Size(128, 128);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 48;
             this.pictureBox1.TabStop = false;
@@ -104,24 +109,26 @@
             // 
             this.pbSensorSignal.BackColor = System.Drawing.Color.Transparent;
             this.pbSensorSignal.Image = ((System.Drawing.Image)(resources.GetObject("pbSensorSignal.Image")));
-            this.pbSensorSignal.Location = new System.Drawing.Point(23, 496);
+            this.pbSensorSignal.Location = new System.Drawing.Point(9, 198);
+            this.pbSensorSignal.Margin = new System.Windows.Forms.Padding(1);
             this.pbSensorSignal.Name = "pbSensorSignal";
-            this.pbSensorSignal.Size = new System.Drawing.Size(320, 320);
+            this.pbSensorSignal.Size = new System.Drawing.Size(128, 128);
             this.pbSensorSignal.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbSensorSignal.TabIndex = 47;
             this.pbSensorSignal.TabStop = false;
             // 
             // IncGauges
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(240F, 240F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(366, 830);
+            this.ClientSize = new System.Drawing.Size(146, 332);
             this.Controls.Add(this.txtRoll);
             this.Controls.Add(this.txtPitch);
             this.Controls.Add(this.pbRoll);
             this.Controls.Add(this.pbPitch);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.pbSensorSignal);
+            this.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "IncGauges";

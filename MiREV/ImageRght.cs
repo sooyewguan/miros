@@ -136,7 +136,7 @@ namespace MiREV
                     
                     var distance = _main.AddRightPoints(rescalePoint(startPoint), rescalePoint(endedPoint));
 
-                    distancePath.AddString(distance.ToString(), System.Drawing.FontFamily.GenericSansSerif, 0, 18, new Point(endedPoint.X, endedPoint.Y - 18), StringFormat.GenericDefault);
+                    distancePath.AddString(Math.Round(distance, 1).ToString(), System.Drawing.FontFamily.GenericSansSerif, 0, 18, new Point(endedPoint.X, endedPoint.Y - 18), StringFormat.GenericDefault);
                     pictureBox.Invalidate();
 
                     /*if (measureWidth)
